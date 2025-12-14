@@ -10,7 +10,7 @@ Viviana Barros Gomes de Sousa (2025014912) -
 Vitoria Cavalcante Souza (2025019481) -
 Samuelson da Silva Lima (2025014860) -
 
-## Principais Classes do Projeto:
+## Principais Class do Projeto:
 
 Classe: Produto
 Atributos: sku, nome, categoria, preço_unitário, estoque
