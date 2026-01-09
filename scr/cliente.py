@@ -8,7 +8,7 @@ class Cliente:
         self.nome = nome
         self.email = email
         self.cpf = cpf
-        self.enderecos = enderecos 
+        self.enderecos = enderecos
         self.ativo = True
 
     def atualizar_email(self, novo_email: str):
