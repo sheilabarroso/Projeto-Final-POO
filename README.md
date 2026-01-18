@@ -45,210 +45,53 @@ Métodos: registrar_pagamento(), validar_pagamento()
 Projeto desenvolvido para a disciplina de **Programação Orientada a Objetos**, com o objetivo de simular uma loja virtual em ambiente de linha de comando (CLI), aplicando conceitos de **POO, regras de negócio, persistência de dados e testes automatizados**.
 
 ---
+### 🛒 Sistema de Loja Virtual (CLI)
+Este projeto é um simulador de e-commerce operando via linha de comando, desenvolvido com foco em Programação Orientada a Objetos (POO) e Persistência de Dados. O sistema gerencia desde a validação de estoque e aplicação de cupons até o faturamento com geração de Nota Fiscal.
 
-## 🎯 Objetivo do Projeto:
-Desenvolver um sistema de loja virtual simplificado que permita:
-- Cadastro e gerenciamento de produtos e clientes
-- Criação de carrinho de compras
-- Fechamento de pedidos
-- Aplicação de cupons de desconto
-- Cálculo de frete
-- Registro de pagamentos
-- Geração de relatórios
-- Persistência de dados em JSON
+## 🚀 Como Rodar
+1. Certifique-se de ter o Python 3.8+ instalado.
 
----
+2. Clone o repositório ou copie o código para um arquivo chamado main.py.
 
-## 🧱 Modelagem e Classes Principais:
-
-### 📦 Produto
-Classe base que representa um produto da loja.
-
-**Atributos principais:**
-- `sku` (único)
-- `nome`
-- `categoria`
-- `preco`
-- `estoque`
-- `ativo`
-
-**Conceitos aplicados:**
-- Encapsulamento com `@property` para validação de preço (>0) e estoque (≥0)
-- Métodos especiais: `__str__`, `__repr__`, `__eq__`, `__lt__`
-
-### 📦 ProdutoFisico
-Subclasse de `Produto`, utilizada para demonstrar **herança**.
-
-**Atributo adicional:**
-- `peso_kg`
-
----
-
-### 👤 Cliente
-Representa o cliente da loja.
-
-**Atributos:**
-- `id`
-- `nome`
-- `email`
-- `cpf`
-- `endereco`
-
-**Regras:**
-- Comparação de clientes por CPF ou e-mail (`__eq__`)
-
----
-
-### 🏠 Endereco
-Classe de valor que representa o endereço do cliente.
-
----
-
-### 🛒 Carrinho / ItemCarrinho
-Responsável por armazenar os itens antes da criação do pedido.
-
-**Funcionalidades:**
-- Adicionar e remover produtos
-- Validar quantidade conforme estoque
-- Calcular subtotal
-
-**Métodos especiais:**
-- `__len__`: retorna a quantidade total de itens no carrinho
-
----
-
-### 📄 Pedido
-Representa um pedido fechado a partir do carrinho.
-
-**Atributos:**
-- `id`
-- `cliente`
-- `itens`
-- `frete`
-- `cupom`
-- `status`
-- `total_pago`
-
-**Estados possíveis:**
-- `CRIADO`
-- `PAGO`
-- `ENVIADO`
-- `ENTREGUE`
-- `CANCELADO`
-
-**Regras de negócio:**
-- Transição controlada de estados
-- Baixa de estoque ao pagamento
-- Aplicação de cupom válido
-- Cálculo do valor total
-
----
-
-### 💳 Pagamento
-Registra um pagamento realizado em um pedido.
-
----
-
-### 🎟️ Cupom
-Representa um cupom de desconto.
-
-**Tipos:**
-- `VALOR`
-- `PERCENTUAL`
-
-**Validações:**
-- Data de validade
-- Limite do desconto para não gerar total negativo
-
----
-
-### 🚚 Frete
-Responsável pelo cálculo do frete e prazo de entrega com base na UF do cliente, utilizando parâmetros definidos em `settings.json`.
-
----
-
-## ⚙️ Persistência de Dados
-A persistência é feita utilizando arquivos **JSON**, através do módulo `dados.py`.
-
-Arquivos principais:
-- `database.json`: armazena produtos, clientes, pedidos e cupons
-- `seed.py`: cria dados iniciais para testes
-
----
-
-## 🧠 Padrões e Conceitos Utilizados
-
-- Programação Orientada a Objetos (POO)
-- Encapsulamento com propriedades
-- Herança
-- Enum para estados do pedido
-- Separação de responsabilidades (models, services, data)
-- Métodos especiais (`__str__`, `__repr__`, `__eq__`, `__lt__`, `__len__`)
-- Validações de regras de negócio
-
----
-
-## 🖥️ Interface (CLI)
-O sistema possui uma interface simples de linha de comando que permite:
-- Listar produtos
-- Criar pedidos
-- Calcular frete
-- Realizar pagamento
-
----
-
-## ▶️ Como Executar
-
-1. Instalar dependências:
+3. Execute o comando:
 ```bash
-pip install -r requirements.txt
+python main.py
 ```
-2. (Opcional) Gerar dados iniciais:
+O sistema criará automaticamente o diretório src/data/ e o arquivo database.json para armazenar os dados.
+
+## 🏗️ Arquitetura e Classes
+O projeto está dividido em responsabilidades claras:
+
+- Modelagem (Entidades)
+- Produto: Gerencia informações do item, preço e controle rigoroso de estoque via @property.
+- Cliente / Endereco: Representam o comprador e o local de destino, essenciais para o cálculo de frete e emissão de nota.
+- Cupom: Classe de regra de negócio que valida datas de expiração e tipos de desconto (Fixo ou Percentual).
+- Pedido: O "coração" do sistema. Orquestra itens, calcula o total devido, gerencia a transação financeira e altera o estado do estoque.
+- Persistência (Dados)
+- GerenciadorDados: Centraliza a leitura e escrita no arquivo JSON.
+- LojaEncoder: Um padrão de codificação customizado que ensina o Python a salvar objetos complexos (como datetime e Enum) em formato de texto.
+
+## 🧠 Padrões e Conceitos de POO Aplicados
+Para atender às exigências de um projeto de alta qualidade, foram utilizados:
+
+- Encapsulamento: Uso de decoradores @property e .setter para garantir que o estoque nunca seja negativo e preços nunca sejam menores ou iguais a zero.
+- Enumerações (Enum): Uso da classe StatusPedido para evitar "strings mágicas" e garantir que o pedido passe apenas por estados válidos (CRIADO, PAGO, CANCELADO).
+- Composição: Um Pedido é composto por uma lista de ItemCarrinho, que por sua vez compõe um Produto.
+- Tratamento de Exceções: Uso de try/except e raise ValueError para lidar com falhas de negócio (ex: tentar pagar um pedido já cancelado ou falta de estoque).
+
+## 📊 Estrutura de Pastas Sugerida
+Para organizar este código conforme os padrões de mercado, utilize:
 ```bash
-python src/data/seed.py
+Plaintext
+loja-virtual/
+├── src/
+│   ├── data/
+│   │   └── database.json    # Criado automaticamente
+│   └── main.py              # Código principal
+└── README.md
 ```
-## 🧪 Testes:
-```bash
-pytest
-```
-## 🗂️ Estrutura do projeto:
-```bash
-loja-virtual-cli/                 # Projeto principal da loja virtual em linha de comando
-│
-├── src/                          # Código-fonte da aplicação
-│   ├── models/                   # Modelos (entidades) do sistema
-│   │   ├── produto.py            # Classe Produto (nome, preço, estoque, etc.)
-│   │   ├── cliente.py            # Classe Cliente (dados do cliente)
-│   │   ├── endereco.py           # Classe Endereco (rua, cidade, CEP, etc.)
-│   │   ├── cupom.py              # Classe Cupom (descontos e regras)
-│   │   ├── carrinho.py           # Classe Carrinho (itens e valores)
-│   │   ├── pedido.py             # Classe Pedido (resumo da compra)
-│   │   ├── pagamento.py          # Classe Pagamento (forma e status do pagamento)
-│   │   └── frete.py              # Classe Frete (cálculo de envio)
-│   │
-│   ├── data/                     # Camada de dados e persistência
-│   │   ├── dados.py              # Funções para leitura e escrita de dados
-│   │   ├── seed.py               # Dados iniciais para testes
-│   │   └── database.json         # Banco de dados em formato JSON
-│   │
-│   ├── services/                 # Regras de negócio e serviços auxiliares
-│   │   ├── estoque_service.py    # Lógica de controle de estoque
-│   │   ├── relatorios.py         # Geração de relatórios
-│   │   └── validacoes.py         # Validações de dados e regras
-│   │
-│   ├── cli.py                    # Interface de linha de comando (entrada do usuário)
-│   └── settings.json             # Configurações gerais do sistema
-│
-├── tests/                        # Testes automatizados
-│   ├── test_carrinho.py          # Testes do carrinho de compras
-│   ├── test_pedido.py            # Testes dos pedidos
-│   ├── test_cupom.py             # Testes dos cupons de desconto
-│   └── test_frete.py             # Testes do cálculo de frete
-│
-├── README.md                     # Documentação do projeto
-├── requirements.txt              # Dependências do projeto
-└── .gitignore                    # Arquivos e pastas ignorados pelo Git
-```
+
 ## 🔗 Diagrama:
-<img width="826" height="841" alt="image" src="https://github.com/user-attachments/assets/79eb4f9b-319e-4e74-86b3-5867b9669942" />
+<img width="913" height="685" alt="image" src="https://github.com/user-attachments/assets/6d79940b-796f-496d-b479-43a1007dcad9" />
+
 
