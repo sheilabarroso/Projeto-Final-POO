@@ -1,16 +1,22 @@
 from item_carrinho import ItemCarrinho
+from produto import Produto
+from cliente import Cliente
+
 
 class Carrinho:
-    def __init__(self, id_carrinho: int, cliente: Cliente):
+    def __init__(self, cliente: Cliente, id_carrinho: int | None = None):
         self.id = id_carrinho
         self.cliente = cliente
         self.itens = {}
+    
+    def adicionar(self, produto: Produto, quantidade: int = 1):
+        self.adicionar_produto(produto, quantidade)
 
     def adicionar_produto(self, produto: Produto, quantidade: int = 1):
         if not produto.ativo:
             raise ValueError("Produto inativo")
 
-       if quantidade > produto.estoque:
+        if quantidade > produto.estoque:
            raise ValueError("Estoque insuficiente")
 
         if produto.sku in self.itens:
@@ -18,7 +24,7 @@ class Carrinho:
         else:
             self.itens[produto.sku] = ItemCarrinho(produto, quantidade)
 
-   def remover_produto(self, sku: str):
+    def remover_produto(self, sku: str):
         if sku not in self.itens:
             raise ValueError("Produto não está no carrinho")
         del self.itens[sku]
@@ -26,7 +32,7 @@ class Carrinho:
     def total(self):
         return sum(item.subtotal() for item in self.itens.values())
 
-    def _len_(self):
+    def __len__(self):
         return sum(item.quantidade for item in self.itens.values())
 
     def exibir(self):
@@ -43,3 +49,4 @@ class Carrinho:
             )
 
         print(f"TOTAL: R$ {self.total():.2f}\n")
+    
