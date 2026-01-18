@@ -1,4 +1,4 @@
-# 1-Entrega---Projeto-Final-POO-
+# Projeto-Final-POO
 ##Projeto: TEMA 9 – SISTEMA DE LOJA VIRTUAL SIMPLIFICADA
 
 ## Integrantes da Equipe:
