@@ -16,7 +16,9 @@ class Cliente:
             raise ValueError("Email inválido")
         self.email = novo_email
 
-    def __eq__(self.other):
+    def __eq__(self, other):
+        if not isinstance(other, Cliente):
+            return False
         return self.cpf == other.cpf or self.email == other.email
 
     def __str__(self):
