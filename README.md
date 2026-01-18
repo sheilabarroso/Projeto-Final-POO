@@ -6,9 +6,9 @@
 - Sheila Matias Barroso (2025014897) - Modelagem da estrutura e Herança.
 - Rubens Lopes dos Santos (2025014805) - Armazenamento de dados e settings.
 - Carlos Rodrigo Ferreira da Silva (2025014304) - Gestão de Produto e Cliente.
-- Viviana Barros Gomes de Sousa (2025014912) - Lógica central do carrinho, pedido e estoque.
+- Viviana Barros Gomes de Sousa (2025014912) - Lógica central do carrinho, pedido e estoque. 
 - Vitoria Cavalcante Souza (2025019481) - Cálculos, Pagamento, Frete e Transições.
-- Samuelson da Silva Lima (2025014860) - Garantia de qualidade e usabilidade.
+- Samuelson da Silva Lima (2025014860) - Garantia de qualidade e usabilidade. 
 
 ## Principais Class do Projeto:
 
@@ -46,7 +46,7 @@ Projeto desenvolvido para a disciplina de **Programação Orientada a Objetos**,
 
 ---
 ### 🛒 Sistema de Loja Virtual (CLI)
-Este projeto é um simulador de e-commerce operando via linha de comando, desenvolvido com foco em Programação Orientada a Objetos (POO) e Persistência de Dados. O sistema gerencia desde a validação de estoque e aplicação de cupons até o faturamento com geração de Nota Fiscal.
+O projeto simula o funcionamento básico de uma loja virtual, permitindo o cadastro de clientes e produtos, adição de itens ao carrinho, criação de pedidos, cálculo de frete, aplicação de cupons de desconto e geração de relatórios.
 
 ## 🚀 Como Rodar
 1. Certifique-se de ter o Python 3.8+ instalado.
@@ -57,7 +57,6 @@ Este projeto é um simulador de e-commerce operando via linha de comando, desenv
 ```bash
 python main.py
 ```
-O sistema criará automaticamente o diretório src/data/ e o arquivo database.json para armazenar os dados.
 
 ## 🏗️ Arquitetura e Classes
 O projeto está dividido em responsabilidades claras:
@@ -74,21 +73,35 @@ O projeto está dividido em responsabilidades claras:
 ## 🧠 Padrões e Conceitos de POO Aplicados
 Para atender às exigências de um projeto de alta qualidade, foram utilizados:
 
-- Encapsulamento: Uso de decoradores @property e .setter para garantir que o estoque nunca seja negativo e preços nunca sejam menores ou iguais a zero.
-- Enumerações (Enum): Uso da classe StatusPedido para evitar "strings mágicas" e garantir que o pedido passe apenas por estados válidos (CRIADO, PAGO, CANCELADO).
-- Composição: Um Pedido é composto por uma lista de ItemCarrinho, que por sua vez compõe um Produto.
-- Tratamento de Exceções: Uso de try/except e raise ValueError para lidar com falhas de negócio (ex: tentar pagar um pedido já cancelado ou falta de estoque).
+- Encapsulamento com @property
+- Associação e composição entre classes
+- Métodos especiais (__str__, __eq__, __lt__, __len__)
+- Validações de regras de negócio
+- Separação de responsabilidades
 
-## 📊 Estrutura de Pastas Sugerida
+## 📊 Estrutura de projeto
 Para organizar este código conforme os padrões de mercado, utilize:
 ```bash
-Plaintext
-loja-virtual/
-├── src/
-│   ├── data/
-│   │   └── database.json    # Criado automaticamente
-│   └── main.py              # Código principal
-└── README.md
+loja_virtual/
+│
+├── models/                      # Modelos (entidades do sistema)
+│   ├── produto.py               # Classe Produto com validações de preço e estoque
+│   ├── cliente.py               # Classe Cliente (cadastro de clientes)
+│   ├── carrinho.py              # Classe Carrinho (gerenciamento do carrinho)
+│   ├── item_carrinho.py         # Classe ItemCarrinho
+│   ├── pedido.py                # Classe Pedido (criação e controle)
+│   ├── item_pedido.py           # Classe ItemPedido
+│   ├── cupom.py                 # Classe Cupom (descontos)
+│   ├── frete.py                 # Classe Frete (cálculo de envio)
+│   └── status_pedido.py         # Enum StatusPedido
+│
+├── services/                    # Regras de negócio e serviços
+│   └── relatorios.py            # Geração de relatórios do sistema
+│
+├── main.py                      # Ponto de entrada / simulação de uso do sistema
+│
+└── README.md                    # Documentação do projeto
+
 ```
 
 ## 🔗 Diagrama:
