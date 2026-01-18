@@ -15,9 +15,7 @@ class Pedido:
         self.frete = 0.0
 
         for item in carrinho.itens.values():
-            self.itens.append(
-                ItemPedido(item.produto, item.quantidade)
-            )
+            self.itens.append(ItemPedido(item.produto, item.quantidade))
 
     def subtotal(self):
         return sum(item.subtotal() for item in self.itens)
